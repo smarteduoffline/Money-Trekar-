@@ -96,10 +96,17 @@ body.night .card.w,body.night .li,body.night .box,body.night input,body.night se
 body.night .tabs{background:#223028}
 body.night .bt.p{background:var(--g);color:#fff}
 body.night [style*="background:#f3faf6"],body.night [style*="background:#e8eaee"]{background:#24342b!important}
-body{font-size:16px}h2{font-size:28px}.card{padding:18px}.li{padding:14px}.grid b{font-size:27px}
-.btn{padding:15px;font-size:17px}.bt{padding:12px 16px;font-size:15px}.bt.s{padding:7px 12px;font-size:14px}
-input,select{padding:14px;font-size:16px}.pl{font-size:14px}.sub{font-size:15px}
-nav button{font-size:13px;padding:10px 4px}nav button i{font-size:25px}.tb2{padding-right:48px}
+body{font-size:15.5px}h2{font-size:27px}.card{padding:17px}.li{padding:13px}.grid b{font-size:26px}
+.btn{padding:14px;font-size:16px}.bt{padding:11px 15px;font-size:14.5px}.bt.s{padding:6px 11px;font-size:13.5px}
+input,select{padding:13px;font-size:15.5px}.pl{font-size:13.5px}.sub{font-size:14.5px}
+nav button{font-size:12.5px;padding:9px 4px}nav button i{font-size:24px}
+.gr{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:6px}.gr>span:first-child{font-size:13px;white-space:nowrap}.ar{font-size:19px;text-align:center}.gr .ib{justify-self:end}
+.pi{text-align:center}.pr{gap:12px}
+.pt{align-items:flex-end;margin-top:16px}
+.tm{white-space:nowrap}.tm b{font-size:18px}.tm small{font-size:12px;margin-left:5px}
+.dt{text-align:right;font-size:14px;line-height:1.5}
+.pd{display:flex;justify-content:space-between;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid #fff4;font-size:14px;line-height:1.5}
+.pd small,.dt small{opacity:.95}
 </style>
 </head>
 <body>
@@ -255,7 +262,7 @@ function lock(){pinPad('পিন দিন',p=>hs(p)==db.pin?true:'ভুল �
 function applyNight(){document.body.classList.toggle('night',!!db.night);document.querySelector('meta[name=theme-color]').content=db.night?'#0f1713':'#16a34a'}
 function night(){db.night=!db.night;save();applyNight();chrome()}
 function chrome(){const on=navigator.onLine,n=db.rem.filter(x=>nextRem(x)<=3).length;
- $('#hd').innerHTML=`<div class="tb"><button class="ib" onclick="nav('rem')">🔔${n?`<i class="bd">${bn(n)}</i>`:''}</button><span class="pl ${on?'':'off'}">● ${on?'অনলাইন':'অফলাইন'}</span><span class="pl ttl"><img src="icon-192.png" alt="">মানিব্যাগ ট্র্যাকার</span><button class="ib" onclick="night()">${db.night?'☀️':'🌙'}</button><button class="ib" onclick="dr(1)">☰</button></div><div class="tb2"><button class="bk" onclick="back()">← ফিরে যান</button></div>`;
+ $('#hd').innerHTML=`<div class="tb"><button class="ib" onclick="nav('rem')">🔔${n?`<i class="bd">${bn(n)}</i>`:''}</button><span class="pl ${on?'':'off'}">● ${on?'অনলাইন':'অফলাইন'}</span><span class="pl ttl"><img src="icon-192.png" alt="">মানিব্যাগ ট্র্যাকার</span><button class="ib" onclick="night()">${db.night?'☀️':'🌙'}</button>${pg!='dash'?'<button class="ib" onclick="dr(1)">☰</button>':''}</div>`;
  $('#dw').innerHTML=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><img src="icon-192.png" style="width:46px;height:46px;border-radius:13px" alt=""><b style="flex:1;font-size:22px;color:var(--gd)">মানিব্যাগ ট্র্যাকার</b><button class="ib" onclick="dr(0)">✕</button></div>`+DR.map(d=>`<div class="it ${d[0]==pg&&(d[0]!='tx'||!st.ty)?'on':''}" onclick="nav('${d[0]}'${d[0]=='tx'?",''":''})"><i>${d[1]}</i>${d[2]}</div>`).join('')+(db.pin?'<div class="it" style="color:#dc2626" onclick="dr(0);lock()"><i>🔒</i>লক করুন</div>':'')+'<small style="margin-top:auto;text-align:center;color:var(--mu);padding-top:12px">মানিব্যাগ ট্র্যাকার • আপনার ব্যক্তিগত ফিন্যান্স</small>';
  $('#nv').innerHTML=[['dash','🏠','হোম',pg=='dash'],['tx','⬇','আয়',pg=='tx'&&st.ty=='i'],['tx','⬆','ব্যয়',pg=='tx'&&st.ty=='e'],['shop','🏪','দোকান বাকি',pg=='shop']].map((x,i)=>`<button class="${x[3]?'on':''}" onclick="nav('${x[0]}'${i==1?",'i'":i==2?",'e'":''})"><i>${x[1]}</i>${x[2]}</button>`).join('')+'<button onclick="back()"><i>↩</i>ফিরে যান</button>';tick()}
 function tick(){const e=$('#ck');if(!e)return;const d=new Date(),h=d.getHours(),p=x=>bn(String(x).padStart(2,'0'));e.textContent=bn(h%12||12)+':'+p(d.getMinutes())+':'+p(d.getSeconds());$('#ap').textContent=h<12?'এএম':'পিএম'}
@@ -265,12 +272,13 @@ function bnD(d){const u=Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()+(AJ().
 function tk(){const t=today(),a=db.tx.filter(x=>x.d==t),m=mt(t.slice(0,7)),f=(l,k)=>sum(l.filter(x=>x.t==k),x=>x.a);
  return['আজকের আয়: '+M(f(a,'i')),'আজকের ব্যয়: '+M(f(a,'e')),'এই মাসের সঞ্চয়: '+M(f(m,'i')-f(m,'e')),'মোট পাওনা: '+M(sum(db.loan.filter(l=>!l.p&&l.k=='g'),l=>l.a)),'মোট দেনা: '+M(sum(db.loan.filter(l=>!l.p&&l.k=='t'),l=>l.a)),'দোকান বাকি: '+M(sum(db.shop.filter(x=>!x.p),x=>x.a)),...db.rem.filter(x=>nextRem(x)<=3).map(x=>'🔔 '+x.t+(nextRem(x)?' — '+bn(nextRem(x))+' দিন পরে':' — আজ'))].join('   •   ')}
 function gt(){const h=new Date().getHours();return h<4?'শুভ রাত্রি':h<12?'শুভ সকাল':h<15?'শুভ দুপুর':h<18?'শুভ বিকাল':h<20?'শুভ সন্ধ্যা':'শুভ রাত্রি'}
-function pcard(){const p=PF(),d=new Date(),t=tk();
- return`<div class="pc"><div class="pr"><div class="av">${p.img?`<img src="${p.img}" alt="">`:'ছবি'}</div><div class="pi"><b>${esc(p.n)||'আপনার নাম'}</b><div>📍 ${esc(p.a)||'ঠিকানা যোগ করুন'}</div><div>📞 ${esc(p.p)||'ফোন নাম্বার'}</div></div></div><div class="pt"><div><small>এখন সময়</small><div><b id="ck" class="ck"></b> <small id="ap"></small></div><small>📅 ${bn(d.getDate())} ${MN[d.getMonth()]}, ${bn(d.getFullYear())} ইং</small></div><div style="text-align:right"><div>🌙 ${hjD(d)}</div><small>${bnD(d)}</small></div></div><div class="lv"><span class="lb">● লাইভ</span><div class="mq"><span style="animation-duration:${Math.max(20,Math.round(t.length*.32))}s">${esc(t)}</span></div></div></div>`}
+function split2(s){const a=s.split(' ');return[a.slice(0,-2).join(' ').replace(/,$/,''),a.slice(-2).join(' ')]}
+function pcard(){const p=PF(),d=new Date(),t=tk(),H=split2(hjD(d)),B=split2(bnD(d));
+ return`<div class="pc"><div class="pr"><div class="av">${p.img?`<img src="${p.img}" alt="">`:'ছবি'}</div><div class="pi"><b>${esc(p.n)||'আপনার নাম'}</b><div>📍 ${esc(p.a)||'ঠিকানা যোগ করুন'}</div><div>📞 ${esc(p.p)||'ফোন নাম্বার'}</div></div></div><div class="pt"><div><small>এখন সময়</small><div class="tm"><b id="ck"></b><small id="ap"></small></div></div><div class="dt">📅 ${bn(d.getDate())} ${MN[d.getMonth()]}<br>${bn(d.getFullYear())} ইং</div></div><div class="pd"><div>🌙 ${H[0]}<br><small>${H[1]}</small></div><div style="text-align:right">${B[0]}<br><small>${B[1]}</small></div></div><div class="lv"><span class="lb">● লাইভ</span><div class="mq"><span style="animation-duration:${Math.max(20,Math.round(t.length*.32))}s">${esc(t)}</span></div></div></div>`}
 function editPf(){const p=PF();form('প্রোফাইল',[{k:'n',l:'নাম',v:p.n,p:'আপনার নাম'},{k:'a',l:'ঠিকানা',v:p.a,p:'ঠিকানা লিখুন'},{k:'p',l:'ফোন নাম্বার',v:p.p,t:'tel',p:'01XXXXXXXXX'}],o=>{Object.assign(p,{n:o.n,a:o.a,p:o.p});save();go()},'সংরক্ষণ')}
 function pickPhoto(){const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=()=>{const f=i.files[0];if(!f)return;const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),k=Math.min(im.width,im.height);c.width=c.height=160;c.getContext('2d').drawImage(im,(im.width-k)/2,(im.height-k)/2,k,k,0,0,160,160);PF().img=c.toDataURL('image/jpeg',.8);save();URL.revokeObjectURL(im.src);go()};im.src=URL.createObjectURL(f)};i.click()}
 const adj=(k,v)=>{AJ()[k]=Math.max(-2,Math.min(2,(AJ()[k]||0)+v));save();go()};
-P.dash=(o=>()=>`<div class="gr"><span>👋 ${gt()}</span><span class="ar">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</span></div>`+pcard()+o().replace(/<div class="hero">.*?<\/div>/,''))(P.dash);
+P.dash=(o=>()=>`<div class="gr"><span>👋 ${gt()}</span><span class="ar">بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</span><button class="ib" onclick="dr(1)">☰</button></div>`+pcard()+o().replace(/<div class="hero">.*?<\/div>/,''))(P.dash);
 
 function fit(){const z=document.documentElement,s=screen.width,w=innerWidth;z.style.zoom='';if(s<700&&w>s*1.2)z.style.zoom=(w/s).toFixed(3)}
 fit();addEventListener('resize',fit);addEventListener('orientationchange',fit);
